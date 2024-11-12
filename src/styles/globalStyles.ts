@@ -5,47 +5,55 @@ import colors from '../assets/constants/colors';
 const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+    backgroundColor: colors.background
   },
   input: {
     height: 50,
-    width: 320,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
+    fontSize: 16,
+    width: 330,
+    backgroundColor: colors.secondary,
+    color: "white",
+    borderRadius: 15,
+    paddingInline: 20,
     marginBottom: 15,
   },
   text: {
-    fontSize: 16,
-    color: '#333',
+    fontFamily: 'Merriweather Sans',
+    fontSize: 14,
+    color: '#A7AEBF',
   },
   title: {
     fontSize: 28,
     fontFamily: 'Merriweather Bold',
     fontWeight: 'bold',
+    color: colors.textPrimary,
     marginBottom: 16,
   },
   description: {
     fontSize: 16,
     fontFamily: 'Merriweather Sans',
     textAlign: 'center',
+    color: colors.textPrimary,
     marginBottom: 32,
+    lineHeight: 30,
   },
   button: {
-    backgroundColor: colors.primary,  // Red color similar to the one in the image
-    borderRadius: 20,  // Rounded edges
+    backgroundColor: colors.tertiary,  // Red color similar to the one in the image
+    borderRadius: 50,  // Rounded edges
     paddingVertical: 10,
     paddingHorizontal: 20,
+  
     width: 320,
     height: 60,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#000', // Color of the shadow
+    shadowOpacity: 0.25, // Opacity of the shadow (0 to 1)
+    shadowOffset: { width: 0, height: 2 }, // Offset of the shadow
+    shadowRadius: 4,
   },
   buttonText: {
-    color: 'white',  // White text
+    color: 'black',  // White text
     fontSize: 17,
     fontFamily: 'Merriweather Bold'
   },
@@ -53,6 +61,17 @@ const globalStyles = StyleSheet.create({
     fontSize: 17,
     color: colors.textSecondary,
     fontFamily: 'Merriweather Sans',
+  },
+  tertiaryButton: {
+    fontSize: 17,
+    color: colors.tertiary,
+    fontFamily: 'Merriweather Sans',
+  },
+  card: {
+    alignItems: 'center',
+    backgroundColor: colors.secondary,
+    borderRadius: 50,  // Rounded edges
+    width: '90%',
   }
 });
 

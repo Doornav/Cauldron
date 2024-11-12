@@ -1,17 +1,17 @@
 // src/screens/LoginScreen.tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { useAuth } from '../auth/AuthContext';
-import { handleFirebaseError } from '../utils/firebaseErrorHandler';
+
 
 //styles
 import styles from '../styles/loginScreenStyles';
 import globalStyles from '../styles/globalStyles';
 
 
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'LoginScreen'>;
+type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'LoginScreen'>;
 
 interface Props {
     navigation: LoginScreenNavigationProp;
@@ -19,66 +19,69 @@ interface Props {
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
-    const { checkEmailVerification, login } = useAuth();
+    const { login , user, token } = useAuth();
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [firebaseError, setFirebaseError] = useState('');
 
     const handleLogin = async () => {
-
         try {
-            await login(email, password); // Use Firebase login
-            const isVerified = await checkEmailVerification();
-            if (isVerified) {
-                navigation.navigate('HomeScreen');
-            } else {
-                navigation.navigate('VerifyEmailScreen');
+            const token = await login(email, password);
+            console.log("ASDFASFSAFS"+token)
+            if(token) {
+                navigation.navigate("MainApp");
             }
             
-        
         } catch (error: any) {
-            
-            handleFirebaseError(error, {setFirebaseError});
-
+            console.log(error);
         }
     };
 
-
+    
     return (
-        <View style={globalStyles.container}>
-        <Text style={globalStyles.title}>Login</Text>
-        {firebaseError ? <Text style={globalStyles.description}>{firebaseError}</Text> : null}
-        <TextInput
-            style={globalStyles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-        />
-        <TextInput
-            style={globalStyles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-        />
-        <TouchableOpacity onPress={handleLogin} style={globalStyles.button}>
-            <Text style={globalStyles.buttonText}>
-                Login
-            </Text>
-        </TouchableOpacity>
+<View style={[globalStyles.container, {alignItems: 'center', paddingTop: 100,}]}>
+    <Text style={globalStyles.title}>Log in</Text>
+    {firebaseError ? <Text style={globalStyles.description}>{firebaseError}</Text> : null}
 
 
-        <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')}>
-            <Text style={globalStyles.secondaryButton}>
-                Don't have an account? Sign up
-            </Text>
-        </TouchableOpacity>
+    <Text style={[globalStyles.text, {alignSelf: 'flex-start', marginLeft: 40, marginBottom: 5,}]}>Email Address</Text>
+    <TextInput
+      style={globalStyles.input}
+      placeholder="Enter your email address"
+      placeholderTextColor={'#494D58'}
+      value={email}
+      onChangeText={setEmail}
+      keyboardType="email-address"
+      autoCapitalize="none"
+    />
+    <Text style={[globalStyles.text, {alignSelf: 'flex-start', marginLeft: 40, marginBottom: 5,}]}>Password</Text>
+    <TextInput
+      style={globalStyles.input}
+      placeholder="Enter your password"
+      placeholderTextColor={'#494D58'}
+      value={password}
+      onChangeText={setPassword}
+      secureTextEntry
+    />
 
-        </View>
 
+    <TouchableOpacity onPress={handleLogin} style={[globalStyles.button, {marginTop: 40, marginBottom: 5,}]}>
+      <Text style={globalStyles.buttonText}>
+        Log in
+      </Text>
+    </TouchableOpacity>
+
+
+    <TouchableOpacity style={{marginTop: 40}} onPress={() => navigation.navigate('SignupScreen')}>
+      <Text style={[globalStyles.secondaryButton]}>
+        New to Cauldron?
+        <Text style={[globalStyles.tertiaryButton]}> Create an account </Text>
+      </Text>
+      
+    </TouchableOpacity>
+
+    </View>
     );
 };
 

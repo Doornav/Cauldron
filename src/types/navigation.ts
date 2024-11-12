@@ -5,5 +5,10 @@ export type RootStackParamList = {
     HomeScreen: undefined;
     TwoFAScreen: undefined;
     VerifyEmailScreen: undefined;
+    LinkAccountScreen: undefined;
+    SettingsScreen: undefined;
+    MainApp: undefined;
+    PortfolioScreen: undefined;
+    MarketScreen: undefined;
   };
   

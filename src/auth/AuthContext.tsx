@@ -1,17 +1,16 @@
 // src/contexts/AuthContext.tsx
 import React, { ReactNode, createContext, useContext, useState, useEffect } from 'react';
-import { auth } from '../config/firebaseConfig';
-import { onAuthStateChanged, User, reload } from 'firebase/auth';
-import * as authService from '../services/authService';
+import { loginRequest, signupRequest } from '../services/authService';
+
 
 interface AuthContextData {
-  isAuthenticated: boolean;
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, phoneNumber:string) => Promise<void>;
-  sendVerificationEmail: () => Promise<void>;
-  checkEmailVerification: () => Promise<boolean>;
-  logout: () => Promise<void>;
+  user: any;
+  token: string;
+  login: (email: string, password: string) => Promise<string | null>;
+  signup: (email: string, password: string, name:string) => Promise<string | null>;
+  // sendVerificationEmail: () => Promise<void>;
+  // checkEmailVerification: () => Promise<boolean>;
+  logout: () => void;
 
  // complete2FAVerification: (verifcationCode: string) => Promise<void>; 
 }
@@ -20,45 +19,84 @@ const AuthContext = createContext<AuthContextData | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-  const [user, setUser] = useState<User | null>(null);
-  const isAuthenticated = user !== null;
+  const [user, setUser] = useState<any>(null);
+  const [token, setToken] = useState<any>(null);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-    return unsubscribe;
-  }, []);
+
+
 
   const login = async (email: string, password: string) => {
-    await authService.loginWithEmail(email, password);
-  };
-
-  const signup = async (email: string, password: string, phoneNumber: string) => {
-    await authService.signupWithEmail(email, password, phoneNumber);
-  };
-
-  const sendVerificationEmail = async () => {
-    if (user) {
-      await authService.sendVerificationEmail(user);
-    } else {
-      throw new Error("No user is logged in trying to send verification email");
-    }
-  };
-
-  const checkEmailVerification = async () => {
-    if (user) {
-      await reload(user);
-      if (user.emailVerified) {
-        setUser(user);
-        return true;
+    try {
+      const response = await loginRequest({ email, password });
+      if (response.token) {
+        setToken(response.token);
+        setUser(response.user); // Assuming `response.user` contains user data
+        return response.token;
+      } else {
+        throw new Error('Login failed: Invalid response');
       }
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     }
-    return false;
-  }
+  };
 
-  const logout = async () => {
-    await authService.logout();
+
+
+  const signup = async (email: string, password: string, name: string) => {
+    try {
+      const response = await signupRequest({ email, password, name });
+      if (response.token) {
+        setToken(response.token);
+        setUser(response.user); // Assuming `response.user` contains user data
+        return response.token;
+      } else {
+        throw new Error('Signup failed: Invalid response');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      throw error;
+    }
+  };
+
+  // const sendVerificationEmail = async () => {
+  //   if (user) {
+  //     await authService.sendVerificationEmail(user);
+  //   } else {
+  //     throw new Error("No user is logged in trying to send verification email");
+  //   }
+  // };
+
+  // const checkEmailVerification = async () => {
+  //   try {
+  //     const user = auth().currentUser;
+  
+  //     // Ensure you await the reload
+  //     await user.reload();
+  
+  //     // Fetch the updated user object
+  //     const updatedUser = auth().currentUser;
+  
+  //     console.log('Email Verified:', updatedUser.emailVerified);
+  
+  //     if (updatedUser.emailVerified) {
+  //       setUser(updatedUser);
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking email verification:', error);
+  //     return false;
+  //   }
+  // };
+  
+
+  const logout = () => {
+    // Clear token from local storage or cookies
+    // Clear user and token state in AuthContext
+    setToken(null);
+    setUser(null);
   };
 
   const complete2FAVerification = async (verifcationCode: string) => {
@@ -68,12 +106,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <AuthContext.Provider
     value={{ 
-      isAuthenticated,
       user,
+      token,
       login, 
       signup, 
-      sendVerificationEmail,
-      checkEmailVerification, 
+      // sendVerificationEmail,
+      // checkEmailVerification, 
       logout
       }}>
       {children}

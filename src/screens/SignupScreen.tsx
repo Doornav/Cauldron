@@ -1,15 +1,15 @@
 // src/screens/SignupScreen.tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { useAuth } from '../auth/AuthContext';
-import { handleFirebaseError } from '../utils/firebaseErrorHandler';
 
 import globalStyles from '../styles/globalStyles';
 import styles from '../styles/signupScreenStyles';
+import colors from '../assets/constants/colors';
 
-type SignupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignupScreen'>;
+type SignupScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignupScreen'>;
 
 interface Props {
   navigation: SignupScreenNavigationProp;
@@ -20,67 +20,72 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [firebaseError, setFirebaseError] = useState('');
 
 
   const handleSignup = async () => {
     try {
-      await signup(email, password, phoneNumber);
-      console.log('User signed up successfully');
-      // Redirect to login or main screen after successful signup
-      navigation.navigate('VerifyEmailScreen');
+      const token = await signup(email, password, name);
+      console.log("SIGNUP TOKEN RESPONSE: "+ JSON.stringify(token));
+
+      if(token) {
+        navigation.navigate("MainApp");
+      }
+      
     } catch (error: any) {
-      console.log(error.message);
-      handleFirebaseError(error, {setFirebaseError});
+      console.log(error);
     }
   };
 
+
+
   return (
-    <View style={globalStyles.container}>
+    <View style={[globalStyles.container, {alignItems: 'center', paddingTop: 100,}]}>
     <Text style={globalStyles.title}>Sign Up</Text>
     {firebaseError ? <Text style={globalStyles.description}>{firebaseError}</Text> : null}
+
+    <Text style={[globalStyles.text, {alignSelf: 'flex-start', marginLeft: 40, marginBottom: 5,}]}>Name</Text>
     <TextInput
       style={globalStyles.input}
-      placeholder="Name"
+      placeholder="Enter you display name"
+      placeholderTextColor={'#494D58'}
       value={name}
       onChangeText={setName}
     />
+    <Text style={[globalStyles.text, {alignSelf: 'flex-start', marginLeft: 40, marginBottom: 5,}]}>Email Address</Text>
     <TextInput
       style={globalStyles.input}
-      placeholder="Email"
+      placeholder="Enter your email address"
+      placeholderTextColor={'#494D58'}
       value={email}
       onChangeText={setEmail}
       keyboardType="email-address"
       autoCapitalize="none"
     />
+    <Text style={[globalStyles.text, {alignSelf: 'flex-start', marginLeft: 40, marginBottom: 5,}]}>Password</Text>
     <TextInput
       style={globalStyles.input}
-      placeholder="Password"
+      placeholder="Enter your password"
+      placeholderTextColor={'#494D58'}
       value={password}
       onChangeText={setPassword}
       secureTextEntry
     />
 
-    <TextInput
-      style={globalStyles.input}
-      placeholder="Phone Number"
-      value={phoneNumber}
-      onChangeText={setPhoneNumber}
-      secureTextEntry
-    />
 
-    <TouchableOpacity onPress={handleSignup} style={globalStyles.button}>
+    <TouchableOpacity onPress={handleSignup} style={[globalStyles.button, {marginTop: 40, marginBottom: 5,}]}>
       <Text style={globalStyles.buttonText}>
-        Signup
+        Sign up
       </Text>
     </TouchableOpacity>
 
 
-    <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-      <Text style={globalStyles.secondaryButton}>
-        Already have an account? Log In
+    <TouchableOpacity style={{marginTop: 40}} onPress={() => navigation.navigate('LoginScreen')}>
+      <Text style={[globalStyles.secondaryButton]}>
+        Already have an account?
+        <Text style={[globalStyles.tertiaryButton]}> Log In </Text>
       </Text>
+      
     </TouchableOpacity>
 
     </View>
