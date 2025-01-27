@@ -9,6 +9,6 @@ export type RootStackParamList = {
     SettingsScreen: undefined;
     MainApp: undefined;
     PortfolioScreen: undefined;
-    MarketScreen: undefined;
+    GoalsScreen: undefined;
   };
   

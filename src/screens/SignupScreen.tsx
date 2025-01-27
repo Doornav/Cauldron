@@ -4,7 +4,6 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { useAuth } from '../auth/AuthContext';
-
 import globalStyles from '../styles/globalStyles';
 import styles from '../styles/signupScreenStyles';
 import colors from '../assets/constants/colors';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/welcomeScreenStyles';
@@ -14,8 +14,12 @@ interface Props {
 }
 
 const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
-  const { user, token, logout } = useAuth();
- 
+  const { user, token, accounts } = useAuth();
+  useEffect(()=> {  
+    console.log("USER", user);
+    console.log("TOKEN", token);
+    console.log("ACCOUNTS" , accounts);
+  });
   return (
     <View style={globalStyles.container}>
     <View style={styles.welcomeCard}>

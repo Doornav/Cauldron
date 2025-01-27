@@ -50,7 +50,7 @@ const LinkAccountScreen: React.FC<Props> = ({ navigation }) => {
 
       const access_token = await exchangeLinkTokenRequest(data, token);
       console.log("ACCESS_TOKEN: " + access_token);
-      navigation.navigate("HomeScreen");
+      navigation.navigate("MainApp");
     },
     [navigation, user]
   );
@@ -94,7 +94,7 @@ const LinkAccountScreen: React.FC<Props> = ({ navigation }) => {
     <Text style={globalStyles.buttonText}>Connect accounts</Text>
     </TouchableOpacity>
 
-    <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+    <TouchableOpacity onPress={() => navigation.navigate('MainApp')}>
       <Text style={globalStyles.tertiaryButton}>Skip for now</Text>
     </TouchableOpacity>
   </View>

@@ -8,12 +8,13 @@ const {
 const {
 handleCreateLinkToken,
 handleExchangePublicToken,
-getAccountDetails
+getAccounts,
+
 } = require('../controllers/plaidController');
 
 router.post('/create_link_token', handleCreateLinkToken);
 
 router.post('/exchange_public_token', handleExchangePublicToken);
 
-router.post('/get_account_details', getAccountDetails);
+router.get('/accounts', verifyToken, getAccounts);
 module.exports = router;

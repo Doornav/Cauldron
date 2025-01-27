@@ -1,20 +1,19 @@
 const mongoose = require('mongoose');
 const accountSchema = require('./accountModel');
-
-const Schema = mongoose.Schema;
-
-const accessTokenSchema = new Schema({
-    accessToken: {
-        type: String,
-        required: true,
-    },
-    accounts: [accountSchema], // Array of accounts linked to this access token
-    linkedAt: {
-        type: Date,
-        default: Date.now,
-    }
+const InstitutionSchema = require('./instiutionModel');
+const accessTokenSchema = new mongoose.Schema({
+  token: { // Plaid access token
+    type: String,
+    required: true 
+  }, 
+  institution: {    // Institution name
+    type: [InstitutionSchema],
+    default: [],
+  }, 
+  accounts: {
+    type: [accountSchema], // Embedded accounts
+    default: [],
+  },
 });
 
-
-
-module.exports = accessTokenSchema;
+module.exports = accessTokenSchema; // Export as a sub-schema

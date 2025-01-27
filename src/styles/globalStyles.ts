@@ -42,7 +42,6 @@ const globalStyles = StyleSheet.create({
     borderRadius: 50,  // Rounded edges
     paddingVertical: 10,
     paddingHorizontal: 20,
-  
     width: 320,
     height: 60,
     alignItems: 'center',

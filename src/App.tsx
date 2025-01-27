@@ -1,10 +1,11 @@
-
+import 'react-native-reanimated';
 import { Link, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthProvider } from './auth/AuthContext';
 import { RootStackParamList } from './types/navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import colors from './assets/constants/colors';
+
 import { Text } from 'react-native-svg';
 //Screens
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -15,7 +16,7 @@ import VerifyEmailScreen from './screens/VerifyEmailScreen';
 import LinkAccountScreen from './screens/LinkAccountScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import PortfolioScreen from './screens/PortfolioScreen';
-import MarketScreen from './screens/MarketScreen';
+import GoalsScreen from './screens/GoalsScreen';
 
 //Icons
 import HomeIcon from './assets/icons/home.svg';
@@ -56,8 +57,8 @@ function BottomTabs() {
         }}
       />
       <Tab.Screen
-        name="Market"
-        component={MarketScreen}
+        name="Goals"
+        component={GoalsScreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             const IconComponent = focused ? MarketIconActive : MarketIcon;
@@ -105,7 +106,9 @@ const App = () => {
           initialRouteName="WelcomeScreen"
           screenOptions={{ headerShown: false }}
         >
+          
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+          <Stack.Screen name="LinkAccountScreen" component={LinkAccountScreen} />
           <Stack.Screen name="SignupScreen" component={SignupScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="VerifyEmailScreen" component={VerifyEmailScreen} />
